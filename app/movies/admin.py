@@ -6,6 +6,7 @@ from .models import (
     Country,
     Director,
     Genre,
+    Language,
     Producer,
     RatingSource,
     Writer,
@@ -20,6 +21,7 @@ admin.site.register(Comment)
 admin.site.register(Country)
 admin.site.register(Director)
 admin.site.register(Genre)
+admin.site.register(Language)
 admin.site.register(Producer)
 admin.site.register(RatingSource)
 admin.site.register(Writer)
