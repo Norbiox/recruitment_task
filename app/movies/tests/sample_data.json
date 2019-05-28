@@ -1,0 +1,143 @@
+[
+{
+    "model": "movies.comment",
+    "pk": 1,
+    "fields": {
+        "movie": 1,
+        "text": "Very well",
+        "created": "2019-05-28T09:48:01.522Z"
+    }
+},
+{
+    "model": "movies.comment",
+    "pk": 2,
+    "fields": {
+        "movie": 1,
+        "text": "Ok movie",
+        "created": "2019-05-28T09:48:06.398Z"
+    }
+},
+{
+    "model": "movies.comment",
+    "pk": 3,
+    "fields": {
+        "movie": 1,
+        "text": "Fantastic",
+        "created": "2019-05-28T09:48:16.599Z"
+    }
+},
+{
+    "model": "movies.comment",
+    "pk": 4,
+    "fields": {
+        "movie": 2,
+        "text": "I don't know what to think about it",
+        "created": "2019-05-28T09:48:26.828Z"
+    }
+},
+{
+    "model": "movies.comment",
+    "pk": 5,
+    "fields": {
+        "movie": 2,
+        "text": "No way",
+        "created": "2019-05-28T09:48:31.223Z"
+    }
+},
+{
+    "model": "movies.movierating",
+    "pk": 1,
+    "fields": {
+        "movie": 1,
+        "source": "Internet Movie Database",
+        "value": "7.9/10"
+    }
+},
+{
+    "model": "movies.movierating",
+    "pk": 2,
+    "fields": {
+        "movie": 1,
+        "source": "Rotten Tomatoes",
+        "value": "88%"
+    }
+},
+{
+    "model": "movies.movierating",
+    "pk": 3,
+    "fields": {
+        "movie": 1,
+        "source": "Metacritic",
+        "value": "84/100"
+    }
+},
+{
+    "model": "movies.movierating",
+    "pk": 4,
+    "fields": {
+        "movie": 2,
+        "source": "Metacritic",
+        "value": "1/100"
+    }
+},
+{
+    "model": "movies.movie",
+    "pk": 1,
+    "fields": {
+        "actors": "Mike Myers, Eddie Murphy, Cameron Diaz, John Lithgow",
+        "awards": "Won 1 Oscar. Another 36 wins & 60 nominations.",
+        "box_office": "$266,982,666",
+        "countries": "USA",
+        "directors": "Andrew Adamson, Vicky Jenson",
+        "dvd": "2001-11-02",
+        "genres": "Animation, Adventure, Comedy, Family, Fantasy",
+        "imdb_rating": 7.9,
+        "imdb_id": "tt0126029",
+        "imdb_votes": "560,926",
+        "languages": "English",
+        "metascore": 84,
+        "plot": "A mean lord exiles fairytale creatures to the swamp of a grumpy ogre, who must go on a quest and rescue a princess for the lord in order to get his land back.",
+        "poster": "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+        "production": "Dreamworks",
+        "rated": "PG",
+        "released": "2001-05-18",
+        "response": "True",
+        "runtime": "90 min",
+        "title": "Shrek",
+        "type": "movie",
+        "website": "http://www.shrek.com/",
+        "writers": "William Steig (based upon the book by), Ted Elliott, Terry Rossio, Joe Stillman, Roger S.H. Schulman, Cody Cameron (additional dialogue), Chris Miller (additional dialogue), Conrad Vernon (additional dialogue)",
+        "year": 2001
+    }
+},
+{
+    "model": "movies.movie",
+    "pk": 2,
+    "fields": {
+        "actors": null,
+        "awards": null,
+        "box_office": null,
+        "countries": null,
+        "directors": null,
+        "dvd": null,
+        "genres": null,
+        "imdb_rating": null,
+        "imdb_id": "qwerty123",
+        "imdb_votes": null,
+        "languages": null,
+        "metascore": null,
+        "plot": null,
+        "poster": null,
+        "production": null,
+        "rated": null,
+        "released": null,
+        "response": "True",
+        "runtime": null,
+        "title": "Who knows",
+        "type": null,
+        "website": null,
+        "writers": null,
+        "year": null
+    }
+}
+]
