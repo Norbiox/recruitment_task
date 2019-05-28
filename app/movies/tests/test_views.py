@@ -55,3 +55,50 @@ class MoviesEndpointsTests(TestCase):
         self.assertEqual(movie_dict, movie.to_dict())
 
 
+class CommentsEndpointsTests(TestCase):
+    fixtures = ['movies/tests/sample_data.json']
+
+    def test_comments_list_get_no_filter(self):
+        url = reverse('comments')
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)
+        comments_list = json.loads(resp.content)
+        self.assertEqual(len(comments_list), 5)
+
+    def test_comments_list_get_only_one_movie(self):
+        url = reverse('comments')
+        movie = models.Movie.objects.get(pk=1)
+        resp = self.client.get(url, {"movieID": movie.id})
+        self.assertEqual(resp.status_code, 200)
+        comments_list = json.loads(resp.content)
+        self.assertEqual(len(comments_list), movie.total_comments)
+
+    def test_comments_list_non_existing_movie(self):
+        url = reverse('comments')
+        resp = self.client.get(url, {"movieID": 100000})
+        self.assertEqual(resp.status_code, 404)
+
+    def test_comments_post_no_text(self):
+        url = reverse('comments')
+        movie = models.Movie.objects.get(pk=1)
+        resp = self.client.post(url, {"movieID": movie.id})
+        self.assertEqual(resp.status_code, 400)
+
+    def test_comments_post_no_movie_id(self):
+        url = reverse('comments')
+        resp = self.client.post(url, {"text": "No text"})
+        self.assertEqual(resp.status_code, 400)
+
+    def test_comments_post_non_existing_movie(self):
+        url = reverse('comments')
+        resp = self.client.post(url, {"movieID": 100000, "text": "No text"})
+        self.assertEqual(resp.status_code, 404)
+
+    def test_comments_post(self):
+        url = reverse('comments')
+        movie = models.Movie.objects.get(pk=1)
+        resp = self.client.post(url, {"movieID": movie.id, "text": "No text"})
+        self.assertEqual(resp.status_code, 200)
+        comment = json.loads(resp.content)
+        self.assertEqual(comment["Movie"], str(movie))
+        self.assertEqual(comment["Text"], "No text")

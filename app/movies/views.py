@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from omdb import OMDBClient
 from requests.exceptions import HTTPError
@@ -13,9 +14,9 @@ def movies(request):
         movies = models.Movie.objects.all()
         return JsonResponse([movie.to_dict() for movie in movies], safe=False)
     elif request.method == "POST":
-        title = request.POST.get("title", None)
+        title = request.POST.get("title")
         if title is None:
-            return HttpResponse("'title' was not given", status=400)
+            return HttpResponse("'title' field is required", status=400)
         client = OMDBClient(apikey=settings.OMDBAPIKEY)
         try:
             omdb_response = client.get(title=title)
@@ -28,3 +29,28 @@ def movies(request):
         movie = models.Movie.from_dict(omdb_response)
         movie.save()
         return JsonResponse(movie.to_dict())
+
+
+@require_http_methods(["GET", "POST"])
+def comments(request):
+    if request.method == "GET":
+        movie_id = request.GET.get("movieID")
+        if movie_id is None:
+            comments = models.Comment.objects.all()
+            return JsonResponse([comment.to_dict() for comment in comments],
+                                safe=False)
+        movie = get_object_or_404(models.Movie, pk=movie_id)
+        comments = models.Comment.objects.filter(movie=movie)
+        return JsonResponse([comment.to_dict() for comment in comments],
+                            safe=False)
+    if request.method == "POST":
+        movie_id = request.POST.get("movieID")
+        text = request.POST.get("text")
+        if movie_id is None or text is None:
+            return HttpResponse("'movieID' and 'text' fields are required",
+                                status=400)
+        movie = get_object_or_404(models.Movie, pk=movie_id)
+        comment = models.Comment(movie=movie, text=text)
+        comment.save()
+        return JsonResponse(comment.to_dict())
+
