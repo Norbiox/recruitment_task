@@ -81,7 +81,25 @@ class Movie(m.Model):
         return len(Comment.objects.filter(movie=self).all())
 
     @classmethod
+    def capitalize_omdb_entry(cls, omdb_entry):
+        new_entry = {}
+        for key, value in omdb_entry.items():
+            new_entry[key.capitalize()] = value
+        new_entry["imdbRating"] = omdb_entry["imdb_rating"]
+        new_entry["imdbVotes"] = omdb_entry["imdb_votes"]
+        new_entry["imdbID"] = omdb_entry["imdb_id"]
+        new_entry["DVD"] = omdb_entry["dvd"]
+        new_entry["BoxOffice"] = omdb_entry["box_office"]
+        new_entry["Ratings"] = []
+        for rating in omdb_entry["ratings"]:
+            for key, value in rating.items():
+                new_entry[key.capitalize()] = value
+        return new_entry
+
+    @classmethod
     def from_dict(cls, data):
+        if "title" in data.keys():
+            data = cls.capitalize_omdb_entry(data)
         na_keys = [key for key, value in data.items() if value == "N/A"]
         for key in na_keys:
             del data[key]

@@ -1,6 +1,8 @@
 import json
 from datetime import date
+from django.conf import settings
 from django.test import TestCase
+from omdb import OMDBClient
 
 from movies import models
 
@@ -16,6 +18,13 @@ class MovieTest(TestCase):
     def test_total_comments(self):
         movie = models.Movie.objects.get(title="Shrek")
         self.assertEqual(movie.total_comments, 3)
+
+    def test_capitalize_ombd_entry(self):
+        client = OMDBClient(apikey=settings.OMDBAPIKEY)
+        data = client.get(title="Titanic")
+        capitalized_data = models.Movie.capitalize_omdb_entry(data)
+        for key, value in capitalized_data.items():
+            self.assertFalse(key.islower())
 
     def test_to_dict_full_info_movie(self):
         movie = models.Movie.objects.get(title="Shrek")
