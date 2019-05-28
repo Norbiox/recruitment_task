@@ -123,6 +123,7 @@ STATIC_URL = '/static/'
 
 # Date format
 DATE_FORMAT = "%d %b %Y"
+ISO_DATE_FORMAT = "%Y-%m-%d"
 
 
 # OMBDAPI key

@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 from omdb import OMDBClient
 from requests.exceptions import HTTPError
 
-from movies import models
+from movies import models, utils
 
 
 @require_http_methods(["GET", "POST"])
@@ -54,3 +54,28 @@ def comments(request):
         comment.save()
         return JsonResponse(comment.to_dict())
 
+
+@require_http_methods(["GET"])
+def top(request):
+    date_boundaries = {}
+    bd, ed = request.GET.get('begin_date'), request.GET.get('end_date')
+    if bd is not None:
+        date_boundaries['begin_datetime'] = utils.iso_string_to_date(bd)
+    if ed is not None:
+        date_boundaries['end_datetime'] = utils.iso_string_to_date(ed)
+    movies = models.Movie.objects.all()
+    movies_comments = {
+        movie: movie.get_total_comments(**date_boundaries) 
+        for movie in movies
+    }
+    ranks = sorted(list(set(movies_comments.values())), reverse=True)
+    ranked_movies = []
+    for movie, total_comments in movies_comments.items():
+        rank = ranks.index(total_comments) + 1
+        ranked_movies.append({
+            "movie_id": movie.id,
+            "total_comments": total_comments,
+            "rank": rank
+        })
+    top = sorted(ranked_movies, key=lambda m: m["rank"])
+    return JsonResponse(top, safe=False)

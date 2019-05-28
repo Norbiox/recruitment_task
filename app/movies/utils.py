@@ -1,3 +1,4 @@
+import pytz
 from datetime import date, datetime
 from django.conf import settings
 from django.http import HttpResponse
@@ -15,6 +16,12 @@ def string_to_date(date_string):
     if date_string is None or date_string == "N/A":
         return None
     return datetime.strptime(date_string, settings.DATE_FORMAT).date()
+
+
+def iso_string_to_date(iso_string):
+    return datetime.strptime(iso_string, settings.ISO_DATE_FORMAT).replace(
+        tzinfo=pytz.utc
+    )
 
 
 def get_parameter_or_400(request_query_dict, parameter_name):
