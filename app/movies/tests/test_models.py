@@ -199,8 +199,17 @@ class MovieRatingTest(TestCase):
         rating = models.MovieRating.objects.get(value="88%")
         rating_dict = rating.to_dict()
         self.assertIsInstance(rating_dict, dict)
+        self.assertEqual(len(rating_dict), 4)
         self.assertIsInstance(rating_dict["ID"], int)
         self.assertEqual(rating_dict["Movie"], "Shrek")
+        self.assertEqual(rating_dict["Source"], "Rotten Tomatoes")
+        self.assertEqual(rating_dict["Value"], "88%")
+
+    def test_to_dict_short(self):
+        rating = models.MovieRating.objects.get(value="88%")
+        rating_dict = rating.to_dict(short=True)
+        self.assertIsInstance(rating_dict, dict)
+        self.assertEqual(len(rating_dict), 2)
         self.assertEqual(rating_dict["Source"], "Rotten Tomatoes")
         self.assertEqual(rating_dict["Value"], "88%")
 

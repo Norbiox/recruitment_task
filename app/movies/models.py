@@ -36,13 +36,15 @@ class MovieRating(m.Model):
         return cls.objects.create(movie=movie, source=data["Source"],
                                   value=data["Value"])
 
-    def to_dict(self):
-        return {
-            "ID": self.id,
-            "Movie": str(self.movie),
+    def to_dict(self, short=False):
+        data = {
             "Source": self.source,
             "Value": self.value
         }
+        if not short:
+            data["ID"] = self.id
+            data["Movie"] = str(self.movie)
+        return data
 
     def __str__(self):
         return f"{self.source} on {self.movie}: {self.value}"
@@ -144,7 +146,7 @@ class Movie(m.Model):
             "Country": self.countries or "N/A",
             "Awards": self.awards or "N/A",
             "Poster": self.poster or "N/A",
-            "Ratings": [r.to_dict() for r in self.ratings.all()],
+            "Ratings": [r.to_dict(short=True) for r in self.ratings.all()],
             "Metascore": self.metascore or "N/A",
             "imdbRating": self.imdb_rating or "N/A",
             "imdbVotes": self.imdb_votes or "N/A",
