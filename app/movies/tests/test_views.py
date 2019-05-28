@@ -4,7 +4,7 @@ from datetime import datetime
 from django.urls import reverse
 from django.test import TestCase
 
-from movies import models, views
+from movies import models
 
 
 class MoviesEndpointsTests(TestCase):
@@ -151,17 +151,17 @@ class TopEndpointTests(TestCase):
         url = reverse('top')
         movies = models.Movie.objects.all()
         for comment in models.Comment.objects.all():
-            comment.created=datetime(2000, 1, 1, tzinfo=pytz.utc)
+            comment.created = datetime(2000, 1, 1, tzinfo=pytz.utc)
             comment.save()
         models.Comment(
             movie=movies[0], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
-        comment1 = models.Comment(
+        models.Comment(
             movie=movies[0], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
-        comment2 = models.Comment(
+        models.Comment(
             movie=movies[1], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
@@ -187,17 +187,17 @@ class TopEndpointTests(TestCase):
         url = reverse('top')
         movies = models.Movie.objects.all()
         for comment in models.Comment.objects.all():
-            comment.created=datetime(2000, 1, 1, tzinfo=pytz.utc)
+            comment.created = datetime(2000, 1, 1, tzinfo=pytz.utc)
             comment.save()
         models.Comment(
             movie=movies[0], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
-        comment1 = models.Comment(
+        models.Comment(
             movie=movies[0], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
-        comment2 = models.Comment(
+        models.Comment(
             movie=movies[1], text="No text",
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
@@ -218,7 +218,6 @@ class TopEndpointTests(TestCase):
                 "rank": 2
             }
         ])
-
 
     def test_top_movies_with_no_comments(self):
         url = reverse('top')
@@ -249,4 +248,3 @@ class TopEndpointTests(TestCase):
                 "rank": 3
             }
         ])
-

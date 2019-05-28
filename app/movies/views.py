@@ -58,14 +58,15 @@ def comments(request):
 @require_http_methods(["GET"])
 def top(request):
     date_boundaries = {}
-    bd, ed = request.GET.get('begin_date'), request.GET.get('end_date')
-    if bd is not None:
-        date_boundaries['begin_datetime'] = utils.iso_string_to_date(bd)
-    if ed is not None:
-        date_boundaries['end_datetime'] = utils.iso_string_to_date(ed)
+    begin_date = request.GET.get('begin_date')
+    end_date = request.GET.get('end_date')
+    if begin_date is not None:
+        date_boundaries['begin_datetime'] = utils.iso_string_to_date(begin_date)
+    if end_date is not None:
+        date_boundaries['end_datetime'] = utils.iso_string_to_date(end_date)
     movies = models.Movie.objects.all()
     movies_comments = {
-        movie: movie.get_total_comments(**date_boundaries) 
+        movie: movie.get_total_comments(**date_boundaries)
         for movie in movies
     }
     ranks = sorted(list(set(movies_comments.values())), reverse=True)
@@ -77,5 +78,5 @@ def top(request):
             "total_comments": total_comments,
             "rank": rank
         })
-    top = sorted(ranked_movies, key=lambda m: m["rank"])
+    top = sorted(ranked_movies, key=lambda movie: movie["rank"])
     return JsonResponse(top, safe=False)

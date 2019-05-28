@@ -1,8 +1,7 @@
 import pytz
-from django.conf import settings
 from django.db import models as m
 from django.utils import timezone
-from datetime import date, datetime
+from datetime import datetime
 
 from .utils import date_to_string, string_to_date
 

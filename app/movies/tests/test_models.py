@@ -172,13 +172,13 @@ class CommentTest(TestCase):
         for comment in comments:
             comment.delete()
         comment0 = models.Comment(movie=movie, text="0")
-        comment0.created=datetime(1980, 5, 2, 0, 0, tzinfo=pytz.UTC)
+        comment0.created = datetime(1980, 5, 2, 0, 0, tzinfo=pytz.UTC)
         comment1 = models.Comment(movie=movie, text="1")
-        comment1.created=datetime(1989, 1, 1, 0, 0, tzinfo=pytz.UTC)
+        comment1.created = datetime(1989, 1, 1, 0, 0, tzinfo=pytz.UTC)
         comment2 = models.Comment(movie=movie, text="2")
-        comment2.created=datetime(2012, 12, 23, 0, 0, tzinfo=pytz.UTC)
+        comment2.created = datetime(2012, 12, 23, 0, 0, tzinfo=pytz.UTC)
         comment3 = models.Comment(movie=movie, text="3")
-        comment3.created=datetime(2018, 4, 3, 0, 0, tzinfo=pytz.UTC)
+        comment3.created = datetime(2018, 4, 3, 0, 0, tzinfo=pytz.UTC)
         all_comments = [comment0, comment1, comment2, comment3]
         for comment in all_comments:
             comment.save()

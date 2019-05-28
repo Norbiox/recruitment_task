@@ -1,7 +1,6 @@
 import pytz
 from datetime import date, datetime
 from django.conf import settings
-from django.http import HttpResponse
 
 
 def date_to_string(date_object):
@@ -22,10 +21,3 @@ def iso_string_to_date(iso_string):
     return datetime.strptime(iso_string, settings.ISO_DATE_FORMAT).replace(
         tzinfo=pytz.utc
     )
-
-
-def get_parameter_or_400(request_query_dict, parameter_name):
-    try:
-        return request_query_dict.get(parameter_name)
-    except KeyError as e:
-        return HttpResponse(f"{parameter_name} field is required", 400)
