@@ -26,7 +26,8 @@ SECRET_KEY = "super-uber-secret-key"
 DEBUG = bool(os.environ.get('DEBUG', ''))
 
 ALLOWED_HOSTS = [
-    '0.0.0.0'
+    '0.0.0.0',
+    'netgururecruitmentapi.herokuapp.com'
 ]
 
 
