@@ -27,12 +27,31 @@ class MoviesEndpointsTests(TestCase):
         movie_dict = json.loads(resp.content)
         self.assertEqual(movie_dict, {})
 
-    def test_movie_post(self):
+    def test_movie_post_new_movie(self):
         url = reverse('movies')
         resp = self.client.post(url, {"title": "Titanic"})
         self.assertEqual(resp.status_code, 200)
         movie_dict = json.loads(resp.content)
-        movie_id = movie_dict["id"]
+        movie_id = movie_dict["ID"]
         movie = models.Movie.objects.get(pk=movie_id)
         self.assertEqual(movie_dict, movie.to_dict())
+
+    def test_movie_post_update_existing_movie(self):
+        url = reverse('movies')
+        resp = self.client.post(url, {"title": "Titanic"})
+        self.assertEqual(resp.status_code, 200)
+        movie_dict = json.loads(resp.content)
+        movie_id = movie_dict["ID"]
+        movie = models.Movie.objects.get(pk=movie_id)
+
+        movie.writers = "no writers"
+        movie.save()
+
+        resp = self.client.post(url, {"title": "Titanic"})
+        self.assertEqual(resp.status_code, 200)
+        movie_dict = json.loads(resp.content)
+        movie_id = movie_dict["ID"]
+        movie = models.Movie.objects.get(pk=movie_id)
+        self.assertEqual(movie_dict, movie.to_dict())
+
 

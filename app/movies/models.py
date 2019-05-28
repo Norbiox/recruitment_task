@@ -106,39 +106,43 @@ class Movie(m.Model):
         imdb_rating = data.get("imdbRating", None)
         metascore = data.get("Metascore", None)
         year = data.get("Year", None)
-        new_movie = cls.objects.create(
-            actors=data.get("Actors", None),
-            awards=data.get("Awards", None),
-            box_office=data.get("BoxOffice", None),
-            countries=data.get("Country", None),
-            directors=data.get("Director", None),
-            dvd=string_to_date(data.get("DVD", None)),
-            genres=data.get("Genre", None),
-            imdb_rating=float(imdb_rating)
+        movie_attributes = {
+            'actors': data.get("Actors", None),
+            'awards': data.get("Awards", None),
+            'box_office': data.get("BoxOffice", None),
+            'countries': data.get("Country", None),
+            'directors': data.get("Director", None),
+            'dvd': string_to_date(data.get("DVD", None)),
+            'genres': data.get("Genre", None),
+            'imdb_rating': float(imdb_rating)
             if imdb_rating is not None else None,
+            'imdb_id': data.get("imdbID"),
+            'imdb_votes': data.get("imdbVotes", None),
+            'languages': data.get("Language", None),
+            'metascore': int(metascore) if metascore is not None else None,
+            'plot': data.get("Plot", None),
+            'poster': data.get("Poster", None),
+            'production': data.get("Production", None),
+            'rated': data.get("Rated", None),
+            'released': string_to_date(data.get("Released", None)),
+            'response': data.get("Response"),
+            'runtime': data.get("Runtime", None),
+            'title': data.get("Title"),
+            'type': data.get("Type", None),
+            'website': data.get("Website", None),
+            'writers': data.get("Writer", None),
+            'year': int(year) if year is not None else None
+        }
+        movie, is_new = cls.objects.update_or_create(
             imdb_id=data.get("imdbID"),
-            imdb_votes=data.get("imdbVotes", None),
-            languages=data.get("Language", None),
-            metascore=int(metascore) if metascore is not None else None,
-            plot=data.get("Plot", None),
-            poster=data.get("Poster", None),
-            production=data.get("Production", None),
-            rated=data.get("Rated", None),
-            released=string_to_date(data.get("Released", None)),
-            response=data.get("Response"),
-            runtime=data.get("Runtime", None),
-            title=data.get("Title"),
-            type=data.get("Type", None),
-            website=data.get("Website", None),
-            writers=data.get("Writer", None),
-            year=int(year) if year is not None else None,
+            defaults=movie_attributes
         )
         ratings = []
         for rating_dict in data["Ratings"]:
-            rating_dict["movieID"] = new_movie.id
+            rating_dict["movieID"] = movie.id
             ratings.append(MovieRating.from_dict(rating_dict))
-        new_movie._ratings = ratings
-        return new_movie
+        movie._ratings = ratings
+        return movie
 
     def save(self, *args, **kwargs):
         if hasattr(self, '_ratings'):
