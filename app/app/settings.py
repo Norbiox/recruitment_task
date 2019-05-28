@@ -123,3 +123,9 @@ STATIC_URL = '/static/'
 
 # Date format
 DATE_FORMAT = "%d %b %Y"
+
+
+# OMBDAPI key
+OMDBAPIKEY = os.environ.get('OMDBAPIKEY')
+if OMDBAPIKEY is None:
+    raise ValueError("OMDBAPIKEY is not defined in environment")
