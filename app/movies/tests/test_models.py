@@ -1,5 +1,6 @@
 import json
-from datetime import date
+import pytz
+from datetime import date, datetime
 from django.conf import settings
 from django.test import TestCase
 from omdb import OMDBClient
@@ -15,9 +16,9 @@ class MovieTest(TestCase):
         movie = models.Movie.objects.get(title="Shrek")
         self.assertEqual(str(movie), "Shrek")
 
-    def test_total_comments(self):
+    def test_get_total_comments(self):
         movie = models.Movie.objects.get(title="Shrek")
-        self.assertEqual(movie.total_comments, 3)
+        self.assertEqual(movie.get_total_comments(), 3)
 
     def test_capitalize_ombd_entry(self):
         client = OMDBClient(apikey=settings.OMDBAPIKEY)
@@ -164,6 +165,33 @@ class MovieTest(TestCase):
 
 class CommentTest(TestCase):
     fixtures = ['movies/tests/sample_data.json']
+
+    def test_get_comments(self):
+        movie = models.Movie.objects.get(title="Who knows")
+        comments = models.Comment.objects.filter(movie=movie)
+        for comment in comments:
+            comment.delete()
+        comment0 = models.Comment(movie=movie, text="0")
+        comment0.created=datetime(1980, 5, 2, 0, 0, tzinfo=pytz.UTC)
+        comment1 = models.Comment(movie=movie, text="1")
+        comment1.created=datetime(1989, 1, 1, 0, 0, tzinfo=pytz.UTC)
+        comment2 = models.Comment(movie=movie, text="2")
+        comment2.created=datetime(2012, 12, 23, 0, 0, tzinfo=pytz.UTC)
+        comment3 = models.Comment(movie=movie, text="3")
+        comment3.created=datetime(2018, 4, 3, 0, 0, tzinfo=pytz.UTC)
+        all_comments = [comment0, comment1, comment2, comment3]
+        for comment in all_comments:
+            comment.save()
+        comments = list(movie.get_comments())
+        old_comments = list(movie.get_comments(
+            end_datetime=datetime(1989, 1, 1, tzinfo=pytz.UTC)
+        ))
+        new_comments = list(movie.get_comments(
+            begin_datetime=datetime(2012, 12, 23, tzinfo=pytz.UTC)
+        ))
+        self.assertEqual(comments, all_comments)
+        self.assertEqual(old_comments, all_comments[:2])
+        self.assertEqual(new_comments, all_comments[2:])
 
     def test_from_dict(self):
         movie = models.Movie.objects.get(title="Who knows")

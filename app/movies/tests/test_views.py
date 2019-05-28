@@ -71,7 +71,7 @@ class CommentsEndpointsTests(TestCase):
         resp = self.client.get(url, {"movieID": movie.id})
         self.assertEqual(resp.status_code, 200)
         comments_list = json.loads(resp.content)
-        self.assertEqual(len(comments_list), movie.total_comments)
+        self.assertEqual(len(comments_list), movie.get_total_comments())
 
     def test_comments_list_non_existing_movie(self):
         url = reverse('comments')
@@ -102,3 +102,14 @@ class CommentsEndpointsTests(TestCase):
         comment = json.loads(resp.content)
         self.assertEqual(comment["Movie"], str(movie))
         self.assertEqual(comment["Text"], "No text")
+
+
+class TopEndpointTests(TestCase):
+    fixtures = ['movies/tests/sample_data.json']
+
+    def test_comments_list_get_no_filter(self):
+        url = reverse('comments')
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)
+        comments_list = json.loads(resp.content)
+        self.assertEqual(len(comments_list), 5)

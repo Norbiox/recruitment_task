@@ -1,4 +1,8 @@
+import pytz
+from django.conf import settings
 from django.db import models as m
+from django.utils import timezone
+from datetime import date, datetime
 
 from .utils import date_to_string, string_to_date
 
@@ -6,7 +10,10 @@ from .utils import date_to_string, string_to_date
 class Comment(m.Model):
     movie = m.ForeignKey('Movie', related_name='comments', on_delete=m.CASCADE)
     text = m.CharField(max_length=500)
-    created = m.DateTimeField(auto_now=True)
+    created = m.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['movie', 'created']
 
     @classmethod
     def from_dict(cls, data):
@@ -29,6 +36,9 @@ class MovieRating(m.Model):
     movie = m.ForeignKey('Movie', related_name='ratings', on_delete=m.CASCADE)
     source = m.CharField(max_length=100)
     value = m.CharField(max_length=10)
+
+    class Meta:
+        ordering = ['movie', 'source']
 
     @classmethod
     def from_dict(cls, data):
@@ -76,9 +86,23 @@ class Movie(m.Model):
     writers = m.CharField(max_length=300, blank=True, null=True)
     year = m.IntegerField(blank=True, null=True)
 
-    @property
-    def total_comments(self):
-        return len(Comment.objects.filter(movie=self).all())
+    def get_comments(self, begin_datetime=None, end_datetime=None):
+        begin_datetime = begin_datetime or datetime(
+            1, 1, 1, 0, 0, tzinfo=pytz.UTC
+        )
+        end_datetime = end_datetime or datetime(
+            9999, 12, 31, 23, 59, 59, 999999, tzinfo=pytz.UTC
+        )
+        return Comment.objects.filter(
+            movie=self
+        ).filter(
+            created__gte=begin_datetime
+        ).filter(
+            created__lte=end_datetime
+        ).all()
+
+    def get_total_comments(self, begin_datetime=None, end_datetime=None):
+        return len(self.get_comments(begin_datetime, end_datetime))
 
     @classmethod
     def capitalize_omdb_entry(cls, omdb_entry):
