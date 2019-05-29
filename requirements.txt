@@ -9,6 +9,7 @@ mysqlclient==1.4.2.post1
 omdb==0.10.1
 psycopg2==2.8.2
 psycopg2-binary==2.8.2
+python-dotenv==0.10.2
 pytz==2019.1
 requests==2.22.0
 sqlparse==0.3.0
