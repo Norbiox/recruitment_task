@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   web:
     build: .
-    command: bash -c "sleep 5 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "sleep 5 && python manage.py makemigrations && python manage.py migrate && python manage.py test movies && gunicorn app.wsgi:application -b '0.0.0.0:8000' -w 2 --log-file -"
     environment:
       SECRET_KEY: ${SECRET_KEY}
       OMDBAPIKEY: ${OMDBAPIKEY}

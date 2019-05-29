@@ -37,9 +37,17 @@ Create `.env` file with database address:
 
     echo 'DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"' > .env
 
-Use docker-compose to build and run docker hosted application:
+Use docker-compose to build, test and run docker hosted application:
 
     docker-compose build
     docker-compose up -d
 
 Voila! You can test API at (http://0.0.0.0:8000/).
+
+
+**NOTE**:
+
+You can test and run application in your environment. All you need to do is to modify
+`DATABASE_URL` in `.env` file by inserting there address of your working postgres database or default SQLite adress:
+
+    sqlite:///db.sqlite3
