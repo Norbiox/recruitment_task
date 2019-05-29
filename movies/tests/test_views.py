@@ -112,40 +112,7 @@ class TopEndpointTests(TestCase):
     def test_top_no_filter(self):
         url = reverse('top')
         resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        top_list = json.loads(resp.content)
-        self.assertEqual(top_list, [
-            {
-                "movie_id": 1,
-                "total_comments": 3,
-                "rank": 1
-            },
-            {
-                "movie_id": 2,
-                "total_comments": 2,
-                "rank": 2
-            }
-        ])
-
-    def test_top_no_filter_equal_ranks(self):
-        url = reverse('top')
-        movie = models.Movie.objects.get(pk=2)
-        models.Comment(movie=movie, text="No text").save()
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        top_list = json.loads(resp.content)
-        self.assertEqual(top_list, [
-            {
-                "movie_id": 1,
-                "total_comments": 3,
-                "rank": 1
-            },
-            {
-                "movie_id": 2,
-                "total_comments": 3,
-                "rank": 1
-            }
-        ])
+        self.assertEqual(resp.status_code, 400)
 
     def test_top_newest_comments(self):
         url = reverse('top')
@@ -166,7 +133,8 @@ class TopEndpointTests(TestCase):
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
         resp = self.client.get(url, {
-            'begin_date': '2017-05-28'
+            'begin_date': '2017-05-28',
+            'end_date': '2100-01-01'
         })
         self.assertEqual(resp.status_code, 200)
         top_list = json.loads(resp.content)
@@ -202,6 +170,7 @@ class TopEndpointTests(TestCase):
             created=datetime(2018, 1, 1, tzinfo=pytz.utc)
         ).save()
         resp = self.client.get(url, {
+            'begin_date': '1970-01-01',
             'end_date': '2005-05-28'
         })
         self.assertEqual(resp.status_code, 200)
@@ -223,7 +192,10 @@ class TopEndpointTests(TestCase):
         url = reverse('top')
         models.Movie(title="New Movie", response="True", imdb_id="0000").save()
         models.Movie(title="New Movie 2", response="True", imdb_id="00").save()
-        resp = self.client.get(url)
+        resp = self.client.get(url, {
+            'begin_date': '1970-01-01',
+            'end_date': '2100-05-28'
+        })
         self.assertEqual(resp.status_code, 200)
         top_list = json.loads(resp.content)
         self.assertEqual(top_list, [

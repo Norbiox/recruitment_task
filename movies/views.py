@@ -60,10 +60,13 @@ def top(request):
     date_boundaries = {}
     begin_date = request.GET.get('begin_date')
     end_date = request.GET.get('end_date')
-    if begin_date is not None:
+    try:
         date_boundaries['begin_datetime'] = utils.iso_string_to_date(begin_date)
-    if end_date is not None:
         date_boundaries['end_datetime'] = utils.iso_string_to_date(end_date)
+    except:
+        return HttpResponse("begin_date and end_date in ISO format" +
+                            " (yyyy-mm-dd) must be given as parameters",
+                            status=400)
     movies = models.Movie.objects.all()
     movies_comments = {
         movie: movie.get_total_comments(**date_boundaries)
