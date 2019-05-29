@@ -39,8 +39,7 @@ Create `.env` file with database address:
 
 Use docker-compose to build, test and run docker hosted application:
 
-    docker-compose build
-    docker-compose up -d
+    docker-compose up -d --no-deps --build
 
 Voila! You can test API at (http://0.0.0.0:8000/).
 
