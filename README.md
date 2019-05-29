@@ -220,6 +220,11 @@ You can test and run application in your environment. All you need to do is to m
         total_comments : [integer],
         rank : [integer]
     } ]`
+
+* **Error Response:**
+
+  * **Code:** 400 BADREQUEST <br />
+    **Content:** `{ error : "begin_date and end_date in ISO format (yyyy-mm-dd) must be given as parameters" }`
  
 * **Sample Call:**
 
