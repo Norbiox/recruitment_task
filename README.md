@@ -4,7 +4,7 @@ Solution for recruitment task.
 
 ## Description
 
-This repository contains application that is solution for reqruitment task.
+This repository contains application that is solution for recruitment task.
 Task is described in [task_description.md](https://github.com/Norbiox/recruitment_task/blob/master/task_description.md).
 
 As a solution django application was created, dockerized and deployed on Heroku.
